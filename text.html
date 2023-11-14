@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Data</title>
+  <style>
+    table {
+      
+      width: 100%;
+      margin-top: 25px;
+    }
+
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: rgb(199, 241, 244);
+    }
+    button{
+        margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Student Data</h2>
+
+<label for="sortField">Sort By:</label>
+<select id="sortField" onchange="sortTable()">
+  <option value="name">Name</option>
+  <option value="age">Age</option>
+  <option value="department">Department</option>
+  <option value="totalMarks">Total Marks</option>
+</select> <br>
+<br>
+
+<label for="searchInput">Search:</label>
+<input type="text" id="searchInput" oninput="filterTable()" placeholder=" Search"> <br> <br>
+
+<label for="filterMarks">Filter by Marks greater than:</label>
+<input type="number" id="filterMarksInput" oninput="filterByMarks()" placeholder="Enter marks"> 
+
+<button onclick="filterByMarks()">Filter</button>
+
+<table id="studentTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Department</th>
+        <th>Total Marks</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Antony</td>
+            <td>23</td>
+            <td>CSE</td>
+            <td>74</td>
+        </tr>
+        <tr>
+            <td>Sumesh</td>
+            <td>22</td>
+            <td>ME</td>
+            <td>58</td>
+        </tr>
+        <tr>
+            <td>Dane Smith</td>
+            <td>20</td>
+            <td>Biology</td>
+            <td>97</td>
+        </tr>
+    </tbody>
+  </table>
+  
+<script>
+  
+  const students = [
+    { name: "Antony", age: 23, department: "CSE", totalMarks: 74 },
+    { name: "Sumesh", age: 22, department: "ME", totalMarks: 58 },
+    { name: "Dane Smith", age: 10, department: "Biology", totalMarks: 97 },
+    
+  ];
+
+  // Display initial table
+  displayTable(students);
+
+  function displayTable(data) {
+    const tableBody = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';
+
+    for (const student of data) {
+      const row = tableBody.insertRow();
+      row.insertCell(0).textContent = student.name;
+      row.insertCell(1).textContent = student.age;
+      row.insertCell(2).textContent = student.department;
+      row.insertCell(3).textContent = student.totalMarks;
+    }
+  }
+
+  function sortTable() {
+    const sortBy = document.getElementById("sortField").value;
+    students.sort((a, b) => a[sortBy] > b[sortBy] ? 1 : -1);
+    displayTable(students);
+  }
+
+  function filterTable() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const filteredStudents = students.filter(student => {
+      return Object.values(student).some(value => {
+        return String(value).toLowerCase().includes(searchInput);
+      });
+    });
+    displayTable(filteredStudents);
+  }
+
+  function filterByMarks() {
+    const filterMarksInput = document.getElementById("filterMarksInput").value;
+    const filteredStudents = students.filter(student => student.totalMarks > filterMarksInput);
+    displayTable(filteredStudents);
+  }
+</script>
+
+</body>
+</html>
